@@ -1,5 +1,5 @@
 import socket
-def client(host = '10.0.84.190', port=8082):
+def client(host = 'localhost', port=8082):
     
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
@@ -13,6 +13,7 @@ def client(host = '10.0.84.190', port=8082):
         #print ("Enviando %s" % message)
         sock.sendall(message.encode('utf-8'))
         data = sock.recv(2048)
+        print(data.decode())
     except socket.error as e:
         print ("Socket error: %s" %str(e))
     except Exception as e:

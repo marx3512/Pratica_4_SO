@@ -1,6 +1,10 @@
+from base64 import decode
 import socket
+import datetime
+from this import d
 
-def server(host = '10.0.84.185', port=8082):
+
+def server(host = 'localhost', port=8082):
     data_payload = 2048 
     
     sock = socket.socket(socket.AF_INET,  socket.SOCK_STREAM)
@@ -17,11 +21,29 @@ def server(host = '10.0.84.185', port=8082):
         print ("Esperando mensagem do cliente")
         client, address = sock.accept()
         data = client.recv(data_payload)
-        '''
-        o que fazer com a mensagem recebida ?
-        '''
+  
         if data:
-            print ("Dados: %s" %data.decode())
-            client.send(data)
+            print ("Solicitação: %s" %data.decode())
+            response = mostrar(data.decode())
+            client.send(response.encode('utf-8'))
             client.close()
+
+
+def mostrar(pedidoCliente):
+    date = datetime.datetime.now()
+    dia = f"{date.day}/{date.month}/{date.year}"
+    hora = f"{date.hour}:{date.minute}:{date.second}"
+
+    if(pedidoCliente == "1"):
+        response = dia
+    elif(pedidoCliente == "2"):
+        response = hora
+    elif(pedidoCliente == "3"):
+        response = f"{dia} {hora}"
+    else:
+        response = "Invalid Request"
+
+    return response
+
+    
 server()
